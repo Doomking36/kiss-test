@@ -13,23 +13,8 @@ kiss_update() {
 
 # Install Kiss packages
 kiss_install() {
-    # Present the user with BIOS or UEFI options
-    exec 3>&1
-    while true; do
-        SYSTEM_TYPE=$(dialog --menu "Select your system type:" 10 50 2 \
-            1 "BIOS" \
-            2 "UEFI" \
-            2>&1 1>&3)
-        case $SYSTEM_TYPE in
-            1 | 2) break;;
-            *) dialog --msgbox "Invalid selection. Please choose 1 for BIOS or 2 for UEFI." 5 50 ;;
-        esac
-    done
-    exec 3>&-
-
-    # Set default package list based on the system type
+    # Set default package list
     PACKAGE_LIST="baseinit e2fsprogs ncurses libelf sqlite util-linux"
-    [ "$SYSTEM_TYPE" -eq 2 ] && PACKAGE_LIST="$PACKAGE_LIST efibootmgr dosfstools"
 
     # Ask the user for additional packages to install, showing default packages
     exec 3>&1
@@ -76,6 +61,7 @@ kiss_install() {
         dialog --msgbox "doas not installed, skipping configuration." 5 50
     fi
 }
+
 
 
 
